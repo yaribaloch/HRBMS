@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin</title>
+</head>
+<body>
+    <h2>Set Room Availability</h2>
+    <form action="/admin" method="post">
+        <input id="roomno" name="roomno">
+        <select id="category" name="category">
+            <option value="standard">Standard</option>
+            <option value="deluxe">Deluxe</option>
+            <option value="suite">Suite</option>
+        </select>
+        <button type="submit">Make available</button>
+    </form>
+</body>
+</html>

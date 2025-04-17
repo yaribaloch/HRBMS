@@ -1,0 +1,25 @@
+{
+  "name": "hrbms",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "yasir",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "bcryptjs": "^3.0.2",
+    "body-parser": "^1.20.3",
+    "cookie-parser": "^1.4.7",
+    "dotenv": "^16.5.0",
+    "express": "^4.21.2",
+    "joi": "^17.13.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.12.1",
+    "nodemon": "^3.1.9",
+    "uuid": "^11.1.0"
+  }
+}
