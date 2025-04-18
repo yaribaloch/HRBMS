@@ -1,3 +1,4 @@
+const { required } = require("@hapi/joi/lib/base");
 const Booking = require("../models/bookingModel");
 const {User} = require("../models/userModel");
 const roles = ["Admin", "Hotel Manager", "Customer"]
@@ -110,19 +111,32 @@ async function handleChangeUserRole(req, res) {
 async function handleChangeUserEmail(req, res) {
     
     try{  
-        const newEmail = req.body.newEmail;
-        const userPasswod = req.body.userPassword;
+        const newEmail = req.body.newEmail.toLowerCase();
+        const userPassword = req.body.userPassword;
         const user = await logedInUser(req.userID);
-        //Verify User Password
-        await bcrypt.compare(userPasswod, user.userPassword, async function(err, result){
-            if(err){ console.log(err);}
-            if(result){
-                //Update To New Email
-                await User.updateOne({userID: user.userID}, {userEmail: newEmail});
-                return res.json(await User.findOne({_id: user.userID}));
-            }else res.send("Password missmatched!")
+        if(!user) return res.status(300).json({
+            status: false,
+            message: "Oops! could not get user."
         })
-
+        console.log("New Email: "+newEmail);
+        console.log("Old User: "+user);
+        
+        //Verify User Password
+        const passwordCheck = await bcrypt.compare(userPassword, user.userPassword);
+        console.log("Password: "+passwordCheck);
+        if(!passwordCheck) return res.status(500).json({
+            status: false,
+            message: "Password missmatched!"})
+        //Update To New Email
+         await User.updateOne({_id: req.userID}, {userEmail: newEmail});
+         const  updatedUser = await User.find({_id: req.userID});
+         console.log("Updated FindUpd: "+updatedUser);
+         return res.status(200).json({
+             status: true,
+             user:  updatedUser
+             
+         }
+         );
     }
     catch(error){
         console.log("error is: "+error);

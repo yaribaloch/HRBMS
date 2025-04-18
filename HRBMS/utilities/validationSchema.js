@@ -11,9 +11,9 @@ const signupAuthSchema = Joi.object({
     userBalance: Joi.number()
 })
 const roomAuthSchema = Joi.object({
-    _id: Joi.number().required(),
+//    _id: Joi.number().required(),
     roomCategory: Joi.number().valid("Suite", "Deluxe", "Standard").required(),
-    roomPrice: Joi.number().required()
+    roomNumber: Joi.number().required()
 })
 const bookingAuthSchema = Joi.object({
     bookingStartDate : Joi.date().required(),

@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs");
 const {setUser} = require("../services/auth");
 const { default: mongoose } = require("mongoose");
+const { response } = require("express");
 async function handleUserLogin(req, res) {
     const {_id, userPassword} = req.body;
     
@@ -19,6 +20,10 @@ async function handleUserLogin(req, res) {
         return res.send("Signup, please.");
     bcrypt.compare(userPassword,user.userPassword, function(err, result){
         if(err){console.log(err);
+            return res.status(500).json({
+                status: false,
+                message: "Incorrect Password."
+            })
         }
         if(result){
             console.log("KEY"+ _id);

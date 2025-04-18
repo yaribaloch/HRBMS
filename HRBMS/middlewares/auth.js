@@ -4,12 +4,12 @@ const jwt = require("jsonwebtoken");
 const logedinUser = require("../utilities/logedinuser")
 async function restrictToLoginedUserOnly(req, res, next){
     const token = req.header("Authorization") || req.header("authorization");
-    console.log("Token: "+token);
+    console.log("Token1: "+token);
     
     //check login session id in cookies
     if(!token) return res.send("Login plz.");
     const decodedToken = jwt.verify(token.split(" ")[1], process.env.JWT_SECRET);
-    console.log("Token: "+decodedToken);
+    console.log("Token2:"+decodedToken._id);
     //check user by login session id
     
     //const userCredentials = await getUser(token);

@@ -6,14 +6,25 @@ const Booking = require("../models/bookingModel");
 async function handleAddRoom(req, res){
     try{
         const result =await roomAuthSchema.validateAsync(req.body);
-        
+        const room = Room.find({roomNumber: result.roomNumber})
+        if(room) return res.status(300).json({
+            status: false,
+            message: "This room is already added in list."
+        })
         console.log(result);
-        
+        switch(result.roomCategory){
+            case "Standard": roomPrice = 4000
+            break;
+            case "Delux": roomPrice = 6000
+            break;
+            case "Suite": roomPrice = 9000
+            break;
+
+        }
         const newRoom = new Room({
-        _id: result._id,
+        roomNumber: result.roomNumber,
         roomCategory: result.roomCategory,
-        roomPrice: result.roomPrice,
-        //r_availability: req.body.r_availability
+        roomPrice: roomPrice
         })
         const data = await newRoom.save();
         res.json(data);
