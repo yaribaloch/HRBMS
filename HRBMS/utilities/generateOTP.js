@@ -4,4 +4,4 @@ function generateOTP(){
 return otpGenerator.generate(6, {lowerCaseAlphabets: false})
 
 }
-module.exports = otpGenerator
+module.exports = generateOTP
