@@ -1,13 +1,30 @@
 const {User} = require("../models/userModel");
 const bcrypt = require("bcryptjs");
+const generateOTP = require("../utilities/validationSchema")
 const {signupAuthSchema} = require("../utilities/validationSchema")
 async function handleUserSignup(req, res){
 
     try{
         const result =await signupAuthSchema.validateAsync(req.body);
         console.log(result);
+        const userExisting = User.findOne({userEmail: result.userEmail});
+        if(userExisting){
+            if(userExisting.autStatus) return res.status(500).json({
+                status: false,
+                message: "User already exists. Please continue to login."
+            })
+
+            const otp = generateOTP();
+            if(!otp) return res.status(300).json({
+                status: false,
+                message: "OTP cann't be generated."
+            })
+
+            const email = 
+            User.findOne({userEmail: result.userEmail}, {userOPT:otp});
+        }
 //            let newuserID = await generateuserID();
-            const user = new User({
+        const user = new User({
  //           userID: newuserID,
             userName: result.userName,
             userEmail: result.userEmail,

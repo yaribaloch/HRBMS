@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const { type } = require("@hapi/joi/lib/extend");
 const userSchema = new mongoose.Schema({
     userName: {
         type:String
@@ -18,6 +19,14 @@ const userSchema = new mongoose.Schema({
     },
     userBalance: {
         type:Number
+    },
+    authStatus: {
+        type:Boolean,
+        default: false
+    },
+    userOPT:{
+        type: String,
+
     }
 })
 userSchema.pre("save", async function(next){

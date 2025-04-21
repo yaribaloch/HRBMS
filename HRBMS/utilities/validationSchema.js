@@ -8,7 +8,7 @@ const signupAuthSchema = Joi.object({
     userName: Joi.string().min(5).max(30).required(),
     //userRole: Joi.string(),
     userContact: Joi.number().required(),
-    userBalance: Joi.number()
+    userBalance: Joi.number(),
 })
 const roomAuthSchema = Joi.object({
 //    _id: Joi.number().required(),
