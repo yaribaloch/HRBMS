@@ -3,6 +3,7 @@
 # dependencies
 /node_modules
 .env
+text.text
 /.pnp
 .pnp.js
 # testing
