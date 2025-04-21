@@ -7,7 +7,7 @@ const {handleAddBooking,
      handleSearchBooking} = require("../controllers/bookingController")
 const {restrictToRole} = require("../middlewares/auth")
 const router = express.Router();
-
+// Routes
 router.get("/searchslot", restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleSearchBookingSlot);
 router.post("/addbooking", restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleAddBooking);
 router.post("/cancelbooking", restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleCancelBooking);

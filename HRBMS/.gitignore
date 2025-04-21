@@ -2,12 +2,12 @@
 
 # dependencies
 /node_modules
+.env
 /.pnp
 .pnp.js
-.env
 # testing
 /coverage
-
+# Thid is test
 # production
 /build
 
