@@ -20,8 +20,12 @@ const bookingAuthSchema = Joi.object({
     bookingEndDate :Joi.date().required(),
     roomNumbers: Joi.array().items(Joi.string()).required()
 })
+const OTPSchema = Joi.object({
+    OTP: Joi.string().uppercase().required()
+})
 module.exports = {
     signupAuthSchema,
     roomAuthSchema,
-    bookingAuthSchema
+    bookingAuthSchema,
+    OTPSchema
 }

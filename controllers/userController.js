@@ -215,6 +215,20 @@ async function handleDeleteUserAccount(req, res) {
         
     }
 }
+async function handleAddBalance(req, res) {
+    const {userEmail, amount} = req.body;
+    const user = await User.findOne({userEmail: userEmail})
+    if(!user) return res.status(400).json({
+        status: false,
+        message: "User not found."
+    })
+    user.userBalance += amount;
+    await user.save();
+    return res.status(300).json({
+        status: true,
+        message: `Amount of $${amount} added in account.`
+    })
+}
 module.exports = {
     handleAddUser, 
     handleGetAllUsers, 
@@ -223,5 +237,6 @@ module.exports = {
     handleSignUp,
     handleChangeUserEmail,
     handleChangeUserPassword,
-    handleDeleteUserAccount
+    handleDeleteUserAccount,
+    handleAddBalance
 }

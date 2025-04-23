@@ -2,7 +2,8 @@ const {User} = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const sendEmail = require("../utilities/sendEmail")
 const generateOTP = require("../utilities/generateOTP")
-const {signupAuthSchema} = require("../utilities/validationSchema")
+const {signupAuthSchema, OTPSchema} = require("../utilities/validationSchema");
+const Joi = require("joi");
 async function handleUserSignup(req, res){
 
     try{
@@ -12,7 +13,9 @@ async function handleUserSignup(req, res){
         console.log("User >"+userExisting);
         
         if(userExisting){
-            if(userExisting.autStatus) return res.status(500).json({
+            console.log(userExisting.authStatus);
+            
+            if(userExisting.authStatus) return res.status(500).json({
                 status: false,
                 message: "User already exists. Please continue to login."
             })
@@ -28,6 +31,8 @@ async function handleUserSignup(req, res){
                 status: false,
                 Message: "User already exists. Couldn't send verification email."
             })
+            console.log("email sending logs", email)
+
             userExisting.userOTP = otp;
             userExisting.save();
            // User.updateOne({userEmail: result.userEmail}, {userOPT:otp});
@@ -56,12 +61,23 @@ async function handleUserSignup(req, res){
             userOTP: otp
         });
         await user.save();
+     
+
+          // Send OTP to email
+    const emailSent = await sendEmail(
+        result.userEmail,
+        "Verification OTP",     
+        `Use this OTP ${otp} to verify your account.`
+      );
+      console.log("emailSent is", emailSent)
+  
+      if (!emailSent) {
+        return res.status(500).json({
+          status: false,
+          message: "Failed to send verification email.",
+        });
+      }
         
-        const email = sendEmail(result.userEmail.toLowerCase(),"Verification OTP", `Use this OTP ${otp} to verify your account.`)
-        if(!email) return res.status(300).json({
-            status: true,
-            message: "Couldn't send verification email."
-        })
         return res.status(200).json({
             status: true,
             message: "User created, Please check email to verify your account."
@@ -86,4 +102,22 @@ async function handleUserSignup(req, res){
 async function handleSignup(req, res) {
     res.send("You are in signup screen.")
 }
-module.exports = {handleSignup, handleUserSignup}
+async function  handleOTPverification(req, res) {
+    const result = await OTPSchema.validateAsync(req.body)
+    const user = await User.findOne({userOTP: result.OTP})
+    console.log(user);
+    
+    if(!user) return res.status(400).json({
+        status: false,
+        message: "OTP not matched."
+    })
+
+    user.userOTP = "";
+    user.authStatus = true
+    await user.save();
+    return res.status(200).json({
+        status: true,
+        message: "Account has been verified. Please login!"
+    })
+}
+module.exports = {handleSignup, handleUserSignup, handleOTPverification}

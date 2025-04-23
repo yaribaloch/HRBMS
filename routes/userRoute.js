@@ -8,7 +8,8 @@ const {handleAddUser,
     handleSignUp, 
     handleChangeUserEmail, 
     handleChangeUserPassword,
-    handleDeleteUserAccount} = require("../controllers/userController");
+    handleDeleteUserAccount,
+    handleAddBalance} = require("../controllers/userController");
 const {restrictToRole} = require("../middlewares/auth")
 
 router.post("/adduser",restrictToRole(["Admin", "Hotel Manager"]), handleAddUser)
@@ -19,6 +20,7 @@ router.post("/changerole",restrictToRole(["Admin"]), handleChangeUserRole)
 router.post("/changeemail",restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleChangeUserEmail)
 router.post("/changepassword",restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleChangeUserPassword)
 router.post("/deleteaccount", handleDeleteUserAccount)
+router.post("/addbalance", restrictToRole(["Admin", "Hotel Manager"]), handleAddBalance)
 //router.post("/signup", handleSignUp)
 
 module.exports = router;
