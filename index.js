@@ -8,6 +8,8 @@ const homeRouter = require("./routes/homeRoute");
 const loginRouter = require("./routes/loginRoute");
 const signupRouter = require("./routes/signupRoute");
 const {restrictToLoginedUserOnly} = require("./middlewares/auth")
+const handleCreateStripeSession = require("./utilities/handleCreateStripeSession")
+
 const app = express();
 
 app.use(express.urlencoded({extended:true}))
@@ -24,6 +26,7 @@ app.use("/bookings", restrictToLoginedUserOnly, bookingRouter);
 app.use("/home", restrictToLoginedUserOnly, homeRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
+app.post("http://localhost:3000/createstripesession", handleCreateStripeSession);
 
 
 

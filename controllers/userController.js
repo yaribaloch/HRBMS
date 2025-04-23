@@ -2,7 +2,7 @@ const { required } = require("@hapi/joi/lib/base");
 const Booking = require("../models/bookingModel");
 const {User} = require("../models/userModel");
 const roles = ["Admin", "Hotel Manager", "Customer"]
-const logedInUser = require("../utilities/logedinuser")
+const logedinUser = require("../utilities/logedinuser")
 const bcrypt = require("bcryptjs")
 async function handleAddUser(req, res){
     try{
@@ -113,7 +113,7 @@ async function handleChangeUserEmail(req, res) {
     try{  
         const newEmail = req.body.newEmail.toLowerCase();
         const userPassword = req.body.userPassword;
-        const user = await logedInUser(req.userID);
+        const user = await logedinUser(req.userID);
         if(!user) return res.status(300).json({
             status: false,
             message: "Oops! could not get user."
@@ -148,7 +148,7 @@ async function handleChangeUserPassword(req, res) {
     try{  
         const newPassword = req.body.new_password;
         const oldPassword = req.body.old_password;
-        const user = await logedInUser(req.userID);
+        const user = await logedinUser(req.userID);
         //Verify User Password
         await bcrypt.compare(oldPassword, user.userPassword, async function(err, result){
             if(err){ console.log(err);}
@@ -173,7 +173,7 @@ async function handleDeleteUserAccount(req, res) {
     try{  
         const userPassword = req.body.userPassword;
         const confirmDelte = req.body.confirmDelte;
-        const user = await logedInUser(req.userID);
+        const user = await logedinUser(req.userID);
         //Verify User Password
         if(confirmDelte=="delete"){
             await bcrypt.compare(userPassword, user.userPassword, async function(err, result){

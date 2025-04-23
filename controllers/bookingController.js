@@ -1,6 +1,8 @@
 const { response } = require("express");
+const fetch = require('node-fetch');
 const Booking = require("../models/bookingModel");
 const {User} = require("../models/userModel");
+const loadstripe = require("@stripe/stripe-js")
 const {bookingPrice} = require("../utilities/bookingPrice");
 const roomsAvailable = require("../utilities/availableroom");
 const logedinUser = require("../utilities/logedinuser");
@@ -41,10 +43,27 @@ async function handleAddBooking(req, res) {
            
             
             //Cut Booking Fee From Users Account - retuns boolean
-            if(await makeATransaction(-bPrice, user, res)){
-                const addNewBooking = await newBooking.save();
-                res.json(addNewBooking);
-            }
+            // if(await makeATransaction(-bPrice, user, res)){
+            //     const addNewBooking = await newBooking.save();
+            //     res.json(addNewBooking);
+            // }
+           // const stripe = await loadstripe(process.env.STRIPE_KEY)
+            try{const body = {bookig: newBooking};
+            const response = await fetch('http://localhost:3000/createstripesession',{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"},
+                body: JSON.stringify(body)
+            })
+        
+            console.log("Session: "+response);
+            const session = response.body
+            res.json(session);
+        }catch(error){console.log(error);
+        }
+
+           
+
         }else{
             res.send("Requested user not found, please register user.")
         }
@@ -64,7 +83,7 @@ async function handleCancelBooking(req, res) {
     const paidAmount = currBooking.bookingPrice;
     //Refund Amount After 25% Cut.
     const refundAmount = (paidAmount*75)/100;
-    const user = await logedInUser(req.userID);
+    const user = await logedinUser(req.userID);
     //If Customer LoggedIn Owns Booking Or Admin/Manager Is Logged In
     if((currBooking.userID==user._id)||(["Admin", "Hotel Manager"].includes(user.userRole))){ 
         //Add Refund Amount In Customers Account
@@ -153,7 +172,9 @@ async function handleSearchBookingSlot(req, res) {
 async function handleBookingHistory(req, res) {
     try{
         //Get LoggedIn User
-        const user =await logedInUser(req.userID);
+        console.log("ID: "+req.userID);
+        
+        const user =await logedinUser(req.userID);
         //Pagination
         let limit = req.query.limit || 3;
         let page = req.query.page || 1;
@@ -184,7 +205,7 @@ async function handleBookingHistory(req, res) {
 }
 async function handleSearchBooking(req, res) {
     try{
-        const user =await logedInUser(req.userID);
+        const user =await logedinUser(req.userID);
         const bookingId = req.body.bookingId;
         const userID = req.body.userID;
         //Converting Date To Milliseconds
