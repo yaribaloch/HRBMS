@@ -1,14 +1,17 @@
 const { response } = require("express");
+
 const fetch = require('node-fetch');
 const Booking = require("../models/bookingModel");
 const {User} = require("../models/userModel");
-const loadstripe = require("@stripe/stripe-js")
+const stripe = require('stripe')(process.env.STRIPE_SECRET);
 const {bookingPrice} = require("../utilities/bookingPrice");
 const roomsAvailable = require("../utilities/availableroom");
 const logedinUser = require("../utilities/logedinuser");
 const getroomproperties = require("../utilities/getroomproperties")
 const makeATransaction = require("../utilities/makeATransaction")
 const {bookingAuthSchema} = require("../utilities/validationSchema");
+const handleCreateStripeSession = require("../utilities/handleCreateStripeSession")   
+const { strip } = require("@hapi/joi/lib/base");
 
 async function handleAddBooking(req, res) {
     try{
@@ -30,7 +33,7 @@ async function handleAddBooking(req, res) {
             //Constructing New Booking
             console.log(rqstdRoomNos);
             
-            const newBooking = new Booking({
+            const newBooking = {
             // bookingId : bookingId,
             roomNumbers : rqstdRoomNos,
             userID : user._id,
@@ -39,7 +42,7 @@ async function handleAddBooking(req, res) {
             bookingDate : new Date(),
             bookingStartDate : startDate,
             bookingEndDate : endDate,
-            })
+            }
            
             
             //Cut Booking Fee From Users Account - retuns boolean
@@ -48,22 +51,7 @@ async function handleAddBooking(req, res) {
             //     res.json(addNewBooking);
             // }
            // const stripe = await loadstripe(process.env.STRIPE_KEY)
-            try{const body = {bookig: newBooking};
-            const response = await fetch('http://localhost:3000/createstripesession',{
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"},
-                body: JSON.stringify(body)
-            })
-        
-            console.log("Session: "+response);
-            const session = response.body
-            res.json(session);
-        }catch(error){console.log(error);
-        }
-
-           
-
+           handleCreateStripeSession(res, newBooking);
         }else{
             res.send("Requested user not found, please register user.")
         }
@@ -291,10 +279,42 @@ async function handleSearchBooking(req, res) {
         
     }
 }
+async function handleBookingPaymentSuccess(req, res) {
+    const sessionID = req.query.session_id;
+    console.log("ID: "+sessionID);
+    
+    const session = await stripe.checkout.sessions.retrieve(sessionID)
+    if(!session) return res.status(500).json({
+        status: false,
+        message: "Could not retrieve checkout session.",
+    })
 
+    const booking= JSON.parse(session.metadata.booking)
+    const newBooking = new Booking(booking);
+    const paymentStatus = session.payment_status
+    if(!paymentStatus) return res.status(500).json({
+        status: false,
+        message: "Payment unsuccessful, booking not added.",
+    })
+    
+    const savedBooking = await newBooking.save();
+    res.status(300).json({
+        status: true,
+        message: "Payment successful, booking added.",
+        booking: savedBooking
+    })
+}
+async function handleBookingPaymentCancel(req, res) {
+    res.status(400).json({
+        status: false,
+        message: "Payment cancelled, booking not added.",
+    })
+}
 module.exports = {handleAddBooking,
      handleCancelBooking, 
      handleSearchBookingSlot, 
      handleBookingHistory,
      handleUpdateBooking,
-     handleSearchBooking}
+     handleSearchBooking,
+     handleBookingPaymentSuccess,
+     handleBookingPaymentCancel}

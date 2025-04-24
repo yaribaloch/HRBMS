@@ -1,14 +1,15 @@
 const express = require("express");
 const {connectToMongoDb} = require("./connection");
 const cookieParser = require("cookie-parser");
+require('dotenv').config();
 const userRouter = require("./routes/userRoute")
 const roomRouter = require("./routes/roomRoute");
 const bookingRouter = require("./routes/bookingRoute");
 const homeRouter = require("./routes/homeRoute");
 const loginRouter = require("./routes/loginRoute");
 const signupRouter = require("./routes/signupRoute");
+const stripeRouter = require("./routes/stripeRoute");
 const {restrictToLoginedUserOnly} = require("./middlewares/auth")
-const handleCreateStripeSession = require("./utilities/handleCreateStripeSession")
 
 const app = express();
 
@@ -26,7 +27,7 @@ app.use("/bookings", restrictToLoginedUserOnly, bookingRouter);
 app.use("/home", restrictToLoginedUserOnly, homeRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
-app.post("http://localhost:3000/createstripesession", handleCreateStripeSession);
+app.use("/stripe", stripeRouter);
 
 
 

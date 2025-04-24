@@ -1,5 +1,4 @@
 const {User} = require("../models/userModel");
-require("dotenv").config();
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs");
 const sendEmail = require("../utilities/sendEmail")
