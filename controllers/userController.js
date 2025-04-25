@@ -15,6 +15,7 @@ async function handleAddUser(req, res){
             userRole: req.body.userRole,
             userContact: req.body.userContact,
             userBalance: req.body.userBalance,
+            authStatus: true
         });
         const data = await user.save();
         res.json(data);
@@ -24,38 +25,6 @@ async function handleAddUser(req, res){
             console.error("Error saving user:", error);
         }
 }
-async function handleSignUp(req, res){
-
-    try{
-//            let newuserID = await generateuserID();
-            const user = new User({
-//          userID: newuserID,
-            userName: req.body.userName,
-            userEmail: req.body.userEmail,
-            userPassword: req.body.userPassword,
-            userRole: "Customer",
-            userContact: req.body.userContact,
-            userBalance: 0.00,
-        });
-        const data = await user.save();
-        res.json(data);
-    }
-        catch (error) {
-            console.error("Error saving user:", error);
-        }
-}
-// async function generateuserID() {
-//     const totallUsers = await User.countDocuments();
-//     const lastUser = await User.find().skip(totallUsers-1);
-
-//     let lastuserID = lastUser[0].userID+1;
-    
-//     const startinguserID = 101;
-//     if(lastuserID){    
-//         return lastuserID;
-//     }else {return startinguserID}
-// }
-
 async function handleGetAllUsers(req, res) {
     try{
         const allUsers = await User.find({});
@@ -118,29 +87,22 @@ async function handleChangeUserEmail(req, res) {
             status: false,
             message: "Oops! could not get user."
         })
-        console.log("New Email: "+newEmail);
-        console.log("Old User: "+user);
-        
+
         //Verify User Password
         const passwordCheck = await bcrypt.compare(userPassword, user.userPassword);
-        console.log("Password: "+passwordCheck);
         if(!passwordCheck) return res.status(500).json({
             status: false,
             message: "Password missmatched!"})
         //Update To New Email
          await User.updateOne({_id: req.userID}, {userEmail: newEmail});
          const  updatedUser = await User.find({_id: req.userID});
-         console.log("Updated FindUpd: "+updatedUser);
          return res.status(200).json({
              status: true,
              user:  updatedUser
-             
-         }
-         );
+        });
     }
     catch(error){
         console.log("error is: "+error);
-        
     }
 }
 async function handleChangeUserPassword(req, res) {
@@ -234,7 +196,6 @@ module.exports = {
     handleGetAllUsers, 
     handleFindUser, 
     handleChangeUserRole, 
-    handleSignUp,
     handleChangeUserEmail,
     handleChangeUserPassword,
     handleDeleteUserAccount,
