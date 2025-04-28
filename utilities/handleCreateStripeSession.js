@@ -44,12 +44,8 @@ async function handleCreateStripeSession(res, newBooking) {
         status: false,
         message: "Could get Stripe payment session.",
     })
+    return sessionRetrieve.data
 
-    return res.status(200).json({
-        status: true,
-        message: "Stripe payment session created.",
-        sessionData: sessionRetrieve.data
-    })
 
 }
 module.exports = handleCreateStripeSession

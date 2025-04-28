@@ -51,7 +51,12 @@ async function handleAddBooking(req, res) {
             //     res.json(addNewBooking);
             // }
            // const stripe = await loadstripe(process.env.STRIPE_KEY)
-           handleCreateStripeSession(res, newBooking);
+           const sessionData = handleCreateStripeSession(res, newBooking);
+           return res.status(200).json({
+            status: true,
+            message: "Stripe payment session created.",
+            sessionData: sessionData
+        })
         }else{
             res.send("Requested user not found, please register user.")
         }
