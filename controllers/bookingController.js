@@ -16,7 +16,6 @@ const { strip } = require("@hapi/joi/lib/base");
 async function handleAddBooking(req, res) {
     try{
         const result =await bookingAuthSchema.validateAsync(req.body);
-        console.log(result);
         //User That Is Currently LoggedIn
         const user =await logedinUser(req.userID);
         if(user) {
@@ -27,12 +26,7 @@ async function handleAddBooking(req, res) {
             
             //Booking Price According To Days And Room Price
             const bPrice = await bookingPrice(startDate, endDate,rqstdRoomNos, res);
-            //Generate A Unique Booking Id For Each Booking.
-           // const bookingId = await generateBookingId(rqstdRoomNo);
-
             //Constructing New Booking
-            console.log(rqstdRoomNos);
-            
             const newBooking = {
             // bookingId : bookingId,
             roomNumbers : rqstdRoomNos,
@@ -43,14 +37,7 @@ async function handleAddBooking(req, res) {
             bookingStartDate : startDate,
             bookingEndDate : endDate,
             }
-           
-            
-            //Cut Booking Fee From Users Account - retuns boolean
-            // if(await makeATransaction(-bPrice, user, res)){
-            //     const addNewBooking = await newBooking.save();
-            //     res.json(addNewBooking);
-            // }
-           // const stripe = await loadstripe(process.env.STRIPE_KEY)
+
            const sessionData = handleCreateStripeSession(res, newBooking);
            return res.status(200).json({
             status: true,
@@ -102,7 +89,6 @@ async function handleUpdateBooking(req, res) {
     const user = await User.findOne({_id: currBooking.userID});
     // New Room, Replacing The Previous Room In Booking.
     const newRoomNo = givenRoomNo? givenRoomNo:currRoomNo;
-    console.log(newRoomNo);
     
     let newRoomPrice =await getroomproperties(newRoomNo, "roomPrice");
     const newRoomCategory = await getroomproperties(newRoomNo, "roomCategory");
@@ -164,9 +150,7 @@ async function handleSearchBookingSlot(req, res) {
 }
 async function handleBookingHistory(req, res) {
     try{
-        //Get LoggedIn User
-        console.log("ID: "+req.userID);
-        
+        //Get LoggedIn User 
         const user =await logedinUser(req.userID);
         //Pagination
         let limit = req.query.limit || 3;
@@ -215,31 +199,11 @@ async function handleSearchBooking(req, res) {
             //Searched Using Booking ID
             if(bookingId){
                 query._id= bookingId;
-                // const bookingRecord = await Booking.findOne({bookingId: bookingId, bookingStartDate: {$gte: startDate, $lte: endDate}, bookingEndDate: {$gte: startDate, $lte: endDate}});
-                // res.json(bookingRecord)
             }
             //Searched Using User ID
-            console.log(userID);
-            
             if(userID){      
                 query.userID= userID;      
-                // const bookingRecord = await Booking.find({userID: userID, bookingStartDate: {$gte: startDate}, bookingEndDate: {$lte: endDate}}).skip(skip).limit(limit);
-                // return res.send(bookingRecord)
             }
-            //Searched Using User Name
-            // if(userName && !userID){
-            //     query.userName= userName;  
-            //     //All Users With Given User Name
-            //     const users = await User.find({userName: userName});
-            //     let userIDs=[];
-            //     //Get User Ids
-            //     users.forEach(async user=>{
-            //         userIDs.push(user.userID);
-            //     });
-            //     //Get All Bookings Where User Ids Match
-            //     let bookingRecord=await Booking.aggregate([{$match:{userID:{$in: userIDs}}}]).skip(skip).limit(limit)
-            //     return res.send(bookingRecord)
-            // }
             //Search Using Start And End Date Only
             if(startDate){
                 query.bookingStartDate=  {$gte: startDate};  
@@ -272,11 +236,6 @@ async function handleSearchBooking(req, res) {
                 })
             }
             res.send(bookingRecord);
-            // return res.status(200).json({
-            //     status: true,
-            //     message: "Bookings found.",
-            //     data: bookingRecord
-            // })
         }
     }
     catch(error){

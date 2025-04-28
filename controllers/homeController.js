@@ -9,6 +9,4 @@ async function handleHome(req, res){
         console.error("Error is: ",error);   
     }
 }
-
-
 module.exports = handleHome;

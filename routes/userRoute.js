@@ -20,6 +20,5 @@ router.post("/changeemail",restrictToRole(["Admin", "Hotel Manager", "Customer"]
 router.post("/changepassword",restrictToRole(["Admin", "Hotel Manager", "Customer"]), handleChangeUserPassword)
 router.post("/deleteaccount", handleDeleteUserAccount)
 router.post("/addbalance", restrictToRole(["Admin", "Hotel Manager"]), handleAddBalance)
-//router.post("/signup", handleSignUp)
 
 module.exports = router;

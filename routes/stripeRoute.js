@@ -6,6 +6,5 @@ const router = express.Router();
 // Routes
 router.get("/bookingpaymentsuccess", handleBookingPaymentSuccess);
 router.get("/bookingpaymentcancel", handleBookingPaymentCancel);
-// router.get("/checkbooking");
 
 module.exports = router;

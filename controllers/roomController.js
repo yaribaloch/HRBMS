@@ -11,7 +11,6 @@ async function handleAddRoom(req, res){
             status: false,
             message: "This room is already added in list."
         })
-        console.log(result);
         switch(result.roomCategory){
             case "Standard": roomPrice = 4000
             break;
@@ -19,7 +18,6 @@ async function handleAddRoom(req, res){
             break;
             case "Suite": roomPrice = 9000
             break;
-
         }
         const newRoom = new Room({
         roomNumber: result.roomNumber,
@@ -39,14 +37,15 @@ async function handleRemoveRoom(req, res){
         
         const roomDeleted = await Room.findOneAndDelete({_id: req.body.roomNumber})
         if(roomDeleted){
-            // const newList = await Room.find({});
         const deletedBooking = await Booking.find({roomNumber: req.body.roomNumber});
         const deletedIds = deletedBooking.map(b=>b.bookingId);
         await Booking.deleteMany({roomNumber: req.body.roomNumber});
-
         res.json(deletedIds);
         }else{
-            res.send("Room not found.");
+            res.status(400).json({
+                status: false,
+                message:"Room not found."
+            })
         }
     }
     catch(error){
@@ -61,6 +60,7 @@ async function handleAllRooms(req, res){
 
         const rooms = await Room.find({}).skip(skip).limit(limit);
         res.send(rooms);
+        
     }
     catch(error){
         console.error("Error is: ",error);   

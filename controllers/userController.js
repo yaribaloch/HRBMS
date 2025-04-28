@@ -158,8 +158,7 @@ async function handleDeleteUserAccount(req, res) {
                     Bookings:{
                         "bookingId": 1
                     }
-                }
-
+                    }
                 }
             ]);
                 await userWithBookings[0].Bookings.forEach(booking=>{
@@ -170,11 +169,9 @@ async function handleDeleteUserAccount(req, res) {
             }else res.send("Password missmatched!")
             })
         }else res.send("Deletion not confirmed!")
-
     }
     catch(error){
-        console.log("error is: "+error);
-        
+        console.log("error is: "+error)
     }
 }
 async function handleAddBalance(req, res) {

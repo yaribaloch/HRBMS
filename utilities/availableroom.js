@@ -7,7 +7,6 @@ async function roomsAvailable(start, end, category, bookingExcepId) {
         var availableRooms=[];
         //Get All Rooms
         var allRooms=Room.find({});
-        
         //Separate All Room No.s In Selected Category
         (await allRooms).forEach(room=>{
             if(category === room.roomCategory)

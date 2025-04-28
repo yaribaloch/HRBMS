@@ -10,9 +10,7 @@ const loginRouter = require("./routes/loginRoute");
 const signupRouter = require("./routes/signupRoute");
 const stripeRouter = require("./routes/stripeRoute");
 const {restrictToLoginedUserOnly} = require("./middlewares/auth")
-
 const app = express();
-
 app.use(express.urlencoded({extended:true}))
 app.use(express.json());
 app.use(cookieParser());

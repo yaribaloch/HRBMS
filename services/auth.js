@@ -5,7 +5,6 @@ function setUser(user){
         _id: user._id,
         userEmail: user.userEmail
     }, key);
-
 }
 
 function  getUser(token){

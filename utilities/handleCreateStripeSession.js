@@ -3,20 +3,19 @@ const axios = require("axios")
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET)
 async function handleCreateStripeSession(res, newBooking) {
-    const booking = newBooking;
+const booking = newBooking;
 
-    
-    const line_items = [{
-        price_data:{
-            currency: "usd",
-            product_data:{
-                name: "Room Booking",
-                description: `Booking is starting from ${booking.bookingStartDate} to ${booking.bookingEndDate}`
-            },
-            unit_amount: booking.bookingPrice
+const line_items = [{
+    price_data:{
+        currency: "usd",
+        product_data:{
+            name: "Room Booking",
+            description: `Booking is starting from ${booking.bookingStartDate} to ${booking.bookingEndDate}`
         },
-        quantity: 1
-    }]
+        unit_amount: booking.bookingPrice
+    },
+    quantity: 1
+}]
 
     const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -32,7 +31,6 @@ async function handleCreateStripeSession(res, newBooking) {
         status: false,
         message: "Could not create Stripe payment session.",
     })
-    //const session = response.data
 
     const sessionRetrieve = await axios.get(`https://api.stripe.com/v1/checkout/sessions/${session.id}`, {
         auth: {
@@ -45,7 +43,5 @@ async function handleCreateStripeSession(res, newBooking) {
         message: "Could get Stripe payment session.",
     })
     return sessionRetrieve.data
-
-
 }
 module.exports = handleCreateStripeSession
