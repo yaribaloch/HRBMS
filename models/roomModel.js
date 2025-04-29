@@ -1,6 +1,10 @@
 const { isNumber } = require("@hapi/joi/lib/common");
 const mongoose = require("mongoose");
 
+
+
+
+
 const roomSchema = new mongoose.Schema({
     roomCategory: {
         type: String,
@@ -13,6 +17,14 @@ const roomSchema = new mongoose.Schema({
     }
 })
 
+
+
+
 const Room = mongoose.model("Room", roomSchema);
+
+
+
+
+
 
 module.exports={Room};
