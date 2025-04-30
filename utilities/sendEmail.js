@@ -2,7 +2,7 @@ const { error } = require("@hapi/joi/lib/base");
 const nodemailer = require("nodemailer")
 async function sendEmail (email, subject, html){
     try {
-        const transporter = nodemailer.createTransport({
+          const transporter = nodemailer.createTransport({
           host: "smtp-relay.brevo.com",
           port: 587,
           secure: false,
@@ -13,14 +13,13 @@ async function sendEmail (email, subject, html){
         });
         
         const mailOptions = {
-            from: process.env.BREVO_EMAIL,
-            to: email,
-            subject: subject,
+          from: process.env.BREVO_EMAIL,
+          to: email,
+          subject: subject,
           text: html.replace(/<[^>]+>/g, ""),
           html: html,
         };
         const info = await transporter.sendMail(mailOptions, (error, info)=>{
-            
         });
         return true;
       } catch (error) {

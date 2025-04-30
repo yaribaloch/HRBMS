@@ -7,7 +7,6 @@ async function bookingPrice(start, end, rqstdRoomNos, res){
     };        
       
     if(start === end){
-        
         return 1*roomsPrice;
     }else if(start < end){
         const msInDay  =1000*60*60*24;

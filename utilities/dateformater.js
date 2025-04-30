@@ -5,7 +5,6 @@ async function dateFormater(date) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 module.exports = dateFormater;
