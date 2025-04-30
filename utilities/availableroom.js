@@ -33,7 +33,6 @@ async function roomsAvailable(start, end, category, bookingExcepId) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 

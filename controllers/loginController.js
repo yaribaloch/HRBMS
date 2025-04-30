@@ -37,7 +37,6 @@ async function handleUserLogin(req, res) {
     }
     const isPasswordMatched = bcrypt.compare(userPassword,user.userPassword) 
     if(isPasswordMatched){
-        
         const accessToken = jwt.sign({_id: user._id}, process.env.JWT_SECRET)
             return res.status(200).json({
                 status: true,

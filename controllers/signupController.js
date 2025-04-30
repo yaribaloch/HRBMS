@@ -49,15 +49,13 @@ async function handleUserSignup(req, res){
             userOTP: otp
         });
         await user.save();
-     
-          // Send OTP to email
-    const emailSent = await sendEmail(
+        // Send OTP to email
+        const emailSent = await sendEmail(
         result.userEmail,
         "Verification OTP",     
         `Use this OTP ${otp} to verify your account.`
       );
-      console.log("emailSent is", emailSent)
-  
+
       if (!emailSent) {
         return res.status(500).json({
           status: false,
@@ -82,7 +80,6 @@ async function handleSignup(req, res) {
 async function  handleOTPverification(req, res) {
     const result = await OTPSchema.validateAsync(req.body)
     const user = await User.findOne({userOTP: result.OTP})
-    console.log(user);
     
     if(!user) return res.status(400).json({
         status: false,

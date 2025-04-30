@@ -34,7 +34,6 @@ async function handleAddRoom(req, res){
 
 async function handleRemoveRoom(req, res){
     try{
-        
         const roomDeleted = await Room.findOneAndDelete({_id: req.body.roomNumber})
         if(roomDeleted){
         const deletedBooking = await Booking.find({roomNumber: req.body.roomNumber});
@@ -60,7 +59,6 @@ async function handleAllRooms(req, res){
 
         const rooms = await Room.find({}).skip(skip).limit(limit);
         res.send(rooms);
-        
     }
     catch(error){
         console.error("Error is: ",error);   

@@ -23,7 +23,6 @@ async function handleAddBooking(req, res) {
             const startDate = req.body.bookingStartDate;
             const endDate = req.body.bookingEndDate;
             const rqstdRoomNos  = req.body.roomNumbers;
-            
             //Booking Price According To Days And Room Price
             const bPrice = await bookingPrice(startDate, endDate,rqstdRoomNos, res);
             //Constructing New Booking
@@ -37,7 +36,6 @@ async function handleAddBooking(req, res) {
             bookingStartDate : startDate,
             bookingEndDate : endDate,
             }
-
            const sessionData = handleCreateStripeSession(res, newBooking);
            return res.status(200).json({
             status: true,
@@ -50,7 +48,6 @@ async function handleAddBooking(req, res) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 async function handleCancelBooking(req, res) {
@@ -79,7 +76,6 @@ async function handleUpdateBooking(req, res) {
     try{//Data From Request Body.
     const bookingId = req.body.bookingId;
     const givenRoomNo = req.body.roomNumber;
-  
     //Booking To Be Updated.
     const currBooking = await Booking.findOne({_id: bookingId});
     const currRoomNo = currBooking.roomNumber;
@@ -112,7 +108,6 @@ async function handleUpdateBooking(req, res) {
     return res.json(await Booking.findOne({_id: bookingId}));
     }catch(error){
         console.log(error);
-        
     }
 }
 async function LookForBookingSlot(newStartDate, newEndDate , category, bookingExcepId) {
@@ -129,7 +124,6 @@ async function LookForBookingSlot(newStartDate, newEndDate , category, bookingEx
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 
@@ -145,7 +139,6 @@ async function handleSearchBookingSlot(req, res) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 async function handleBookingHistory(req, res) {
@@ -177,7 +170,6 @@ async function handleBookingHistory(req, res) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 async function handleSearchBooking(req, res) {
@@ -192,7 +184,6 @@ async function handleSearchBooking(req, res) {
         let limit = req.query.limit || 3;
         let page = req.query.page || 1;
         let skip = (page-1)*limit;
-        
         
         if(["Admin", "Hotel Manager"].includes(user.userRole)) {
             const query = {}
@@ -240,7 +231,6 @@ async function handleSearchBooking(req, res) {
     }
     catch(error){
         console.error("Following error occurred.", error);
-        
     }
 }
 async function handleBookingPaymentSuccess(req, res) {

@@ -6,7 +6,6 @@ const logedinUser = require("../utilities/logedinuser")
 const bcrypt = require("bcryptjs")
 async function handleAddUser(req, res){
     try{
-
         if(roles.includes(req.body.userRole)){
             const user = new User({
             userName: req.body.userName,
@@ -21,27 +20,23 @@ async function handleAddUser(req, res){
         res.json(data);
     }else res.send("Described role does not exit.")
     }
-        catch (error) {
-            console.error("Error saving user:", error);
-        }
+    catch (error) {
+        console.error("Error saving user:", error);
+    }
 }
 async function handleGetAllUsers(req, res) {
     try{
         const allUsers = await User.find({});
-        return res.json(allUsers);}
+        return res.json(allUsers);
+    }
     catch(error){
         console.log("error is: "+error);
-        
     }
 }
 async function handleFindUser(req, res) {
-    
     try{  
-        const searchedUserID = req.body.userID;
-        console.log(searchedUserID);
-        
+        const searchedUserID = req.body.userID;        
         const userSearched = await User.findOne({_id: searchedUserID});
-        console.log(userSearched);
         
         if(userSearched==null){
             res.send("No such a user.")
@@ -49,7 +44,6 @@ async function handleFindUser(req, res) {
     }
     catch(error){
         console.log("error is: "+error);
-        
     }
 }
 async function checkuserID(id) {
@@ -58,7 +52,6 @@ async function checkuserID(id) {
     else {return false;}
 }
 async function handleChangeUserRole(req, res) {
-    
     try{  
         const newRole = req.body.userRole;
         const userID = req.body.userID;
@@ -74,7 +67,6 @@ async function handleChangeUserRole(req, res) {
     }
     catch(error){
         console.log("error is: "+error);
-        
     }
 }
 async function handleChangeUserEmail(req, res) {
@@ -94,9 +86,9 @@ async function handleChangeUserEmail(req, res) {
             status: false,
             message: "Password missmatched!"})
         //Update To New Email
-         await User.updateOne({_id: req.userID}, {userEmail: newEmail});
-         const  updatedUser = await User.find({_id: req.userID});
-         return res.status(200).json({
+        await User.updateOne({_id: req.userID}, {userEmail: newEmail});
+        const  updatedUser = await User.find({_id: req.userID});
+        return res.status(200).json({
              status: true,
              user:  updatedUser
         });
@@ -123,15 +115,12 @@ async function handleChangeUserPassword(req, res) {
                 return res.json("Password updated succesfully.");
             }else res.send("Password missmatched!")
         })
-
     }
     catch(error){
         console.log("error is: "+error);
-        
     }
 }
 async function handleDeleteUserAccount(req, res) {
-    
     try{  
         const userPassword = req.body.userPassword;
         const confirmDelte = req.body.confirmDelte;
