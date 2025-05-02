@@ -36,8 +36,8 @@ async function handleAddBooking(req, res) {
             bookingStartDate : startDate,
             bookingEndDate : endDate,
             }
-           const sessionData = handleCreateStripeSession(res, newBooking);
-           return res.status(200).json({
+            const sessionData = handleCreateStripeSession(res, newBooking);
+            return res.status(200).json({
             status: true,
             message: "Stripe payment session created.",
             sessionData: sessionData
@@ -103,7 +103,9 @@ async function handleUpdateBooking(req, res) {
         await makeATransaction(amountDiff, user, res);
         //Update Booking With New Data.
         await Booking.updateMany({_id: bookingId}, {$set:{roomNumber: newRoomNo, roomCategory: newRoomCategory, bookingPrice: newBookingPrice, bookingStartDate:newStartDate, bookingEndDate:newEndDate  }}); 
-    }else{return res.send("Room not available!")}
+    }else{
+        return res.send("Room not available!")
+    }
 
     return res.json(await Booking.findOne({_id: bookingId}));
     }catch(error){
@@ -214,9 +216,9 @@ async function handleSearchBooking(req, res) {
                 $unwind: "$UserDetails"    
             },
             {$project:{
-                    "UserDetails._id": 0,
-                    "UserDetails.userPassword":0,
-                    "UserDetails.__v": 0
+                "UserDetails._id": 0,
+                "UserDetails.userPassword":0,
+                "UserDetails.__v": 0
             }},
             {$limit: Number(limit)},
             {$skip: skip}]);

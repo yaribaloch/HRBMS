@@ -1,9 +1,9 @@
-const {getUser} = require("../services/auth")
 async function handleHome(req, res){
     try{
-        const token = req.cookies?.token;
-        const user = getUser(token);
-        res.json(user);
+        res.status(200).json({
+            status: true,
+            message: "You are on home page."
+        });
     }
     catch(error){
         console.error("Error is: ",error);   
