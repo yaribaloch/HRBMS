@@ -63,8 +63,8 @@ async function handleShowComments(req, res) {
     },
     {
         $project: {
-            // "_id": 0,
-            // "__v": 0,
+            "_id": 0,
+            "__v": 0,
             "message": 1,
             "rating": 1,
             "UserDetails.userName":1

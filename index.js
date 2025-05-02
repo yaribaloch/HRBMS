@@ -25,7 +25,7 @@ app.use("/rooms", restrictToLoginedUserOnly, roomRouter);
 app.use("/bookings", restrictToLoginedUserOnly, bookingRouter);
 app.use("/home", restrictToLoginedUserOnly, homeRouter);
 app.use("/stripe", restrictToLoginedUserOnly,stripeRouter);
-app.use("/comments", restrictToLoginedUserOnly,commentRouter);
+app.use("/comments",commentRouter);
 app.use("/login", loginRouter);
 app.use("/signup", signupRouter);
 

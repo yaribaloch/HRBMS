@@ -263,7 +263,7 @@ async function handleBookingPaymentSuccess(req, res) {
 async function handleBookingPaymentCancel(req, res) {
     res.status(400).json({
         status: false,
-        message: "Payment cancelled, booking not added.",
+        message: "Payment failed, booking not added.",
     })
 }
 module.exports = {handleAddBooking,

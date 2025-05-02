@@ -40,7 +40,7 @@ const line_items = [{
     })
     if(!sessionRetrieve) return res.status(400).json({
         status: false,
-        message: "Could get Stripe payment session.",
+        message: "Could'nt get Stripe payment session.",
     })
     return sessionRetrieve.data
 }

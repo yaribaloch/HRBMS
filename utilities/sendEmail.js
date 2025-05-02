@@ -19,9 +19,13 @@ async function sendEmail (email, subject, html){
           text: html.replace(/<[^>]+>/g, ""),
           html: html,
         };
-        const info = await transporter.sendMail(mailOptions, (error, info)=>{
+        await transporter.sendMail(mailOptions, (error, info)=>{
+          if (error)
+            return false
+          if(info)
+            return true;
         });
-        return true;
+
       } catch (error) {
         console.error("Failed to send email:", error);
         return false;
