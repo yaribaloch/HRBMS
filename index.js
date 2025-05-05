@@ -11,6 +11,7 @@ const signupRouter = require("./routes/signupRoute");
 const stripeRouter = require("./routes/stripeRoute");
 const commentRouter = require("./routes/commentRoute");
 const {restrictToLoginedUserOnly} = require("./middlewares/auth")
+const {requestNotificationPermission} = require("./utilities/notificationPermission")
 const app = express();
 app.use(express.urlencoded({extended:true}))
 app.use(express.json());
@@ -18,7 +19,8 @@ app.use(cookieParser());
 
 //connection
 connectToMongoDb();
-
+//request notification permission
+requestNotificationPermission();
 //routers
 app.use("/users", restrictToLoginedUserOnly, userRouter);
 app.use("/rooms", restrictToLoginedUserOnly, roomRouter);
