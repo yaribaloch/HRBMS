@@ -6,7 +6,7 @@ const Booking = require("../models/bookingModel");
 async function handleAddRoom(req, res){
     try{
         const result =await roomAuthSchema.validateAsync(req.body);
-        const room = Room.find({roomNumber: result.roomNumber})
+        const room = await Room.findOne({roomNumber: result.roomNumber})
         if(room) return res.status(300).json({
             status: false,
             message: "This room is already added in list."
@@ -26,6 +26,11 @@ async function handleAddRoom(req, res){
         })
         const data = await newRoom.save();
         res.json(data);
+
+        const socket = req.app.get("io");
+        socket.emit("roomAdded", data);
+
+
     }
     catch(error){
         console.error("Error is: ",error);   

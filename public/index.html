@@ -3,6 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>HRBMS</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+
+    <script>
+        const socket = io("http://localhost:3000");
+
+        socket.on("connect", () => {
+        console.log("Connected:", socket.id);
+        });
+
+        socket.on("roomAdded", (room) => {
+        console.log("Room added:", room);
+        alert(`New room with number ${room.roomNumber} has been aded.`);
+        });
+    </script>
 </head>
 <body>
     <form action="/" method="post">

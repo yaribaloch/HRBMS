@@ -6,7 +6,6 @@ const { $_match } = require("@hapi/joi/lib/base");
 const {commentAuthSchema} = require("../utilities/validationSchema")
 async function handleComment(req, res){
 const result = await commentAuthSchema.validateAsync(req.body);
-console.log(req.userID);
 
 const bookings = await Booking.aggregate([{
     $lookup: {
@@ -28,7 +27,6 @@ const bookings = await Booking.aggregate([{
     }
 }
 ])
-console.log("Bookings:" + bookings);
 
 if(!bookings)
     return res.status(400).json({
@@ -40,7 +38,6 @@ const comment = new Comment({
     rating: result.rating,
     userID: req.userID
 })
-console.log(comment);
 
 const newComment = await comment.save()
 
