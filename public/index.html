@@ -11,7 +11,7 @@
         socket.on("connect", () => {
         console.log("Connected:", socket.id);
         });
-
+        
         socket.on("roomAdded", (room) => {
         console.log("Room added:", room);
         alert(`New room with number ${room.roomNumber} has been aded.`);
@@ -20,14 +20,8 @@
 </head>
 <body>
     <form action="/" method="post">
-        <label for="username">Give Username: </label>
-        <input id="username" type="text" name="username"/>
-        <label for="email">Give Email: </label>
-        <input id="email" type="text" name="email"/>
-        <label for="password">Give Password: </label>
-        <input id="password" type="text" name="password"/>
-
-        <button type="submit">GO</button>
+        <h1>Home</h1>
+        <h3>This is HRBMS homepage.</h1>
     </form>
 </body>
 </html>
