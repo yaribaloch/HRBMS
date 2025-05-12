@@ -38,11 +38,11 @@ async function handleUserSignup(req, res){
             message: "OTP cann't be generated."
         })
 
-        const encryptedPassword = await bcrypt.hash(result.userPassword, 10)
+        //const encryptedPassword = await bcrypt.hash(result.userPassword, 10)
         const user = new User({
             userName: result.userName,
             userEmail: result.userEmail,
-            userPassword: encryptedPassword,
+            userPassword: result.userPassword,
             userRole: "Customer",
             userContact: result.userContact,
             userBalance: 0.00,
