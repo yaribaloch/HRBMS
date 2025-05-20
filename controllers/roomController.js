@@ -1,6 +1,7 @@
 const Joi = require("joi");
 const {Room}= require("../models/roomModel")
 const {roomAuthSchema} = require("../utilities/validationSchema");
+const { result } = require("@hapi/joi/lib/base");
 const Booking = require("../models/bookingModel");
 async function handleAddRoom(req, res){
     try{

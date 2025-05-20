@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-const { type } = require("@hapi/joi/lib/extend");
 const userSchema = new mongoose.Schema({
     userName: {
         type:String

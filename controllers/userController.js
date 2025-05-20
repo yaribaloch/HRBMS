@@ -1,3 +1,4 @@
+const { required } = require("@hapi/joi/lib/base");
 const Booking = require("../models/bookingModel");
 const {User} = require("../models/userModel");
 const roles = ["Admin", "Hotel Manager", "Customer"]
