@@ -1,7 +1,6 @@
 const Joi = require("joi");
 const {Room}= require("../models/roomModel")
 const {roomAuthSchema} = require("../utilities/validationSchema");
-const { result } = require("@hapi/joi/lib/base");
 const Booking = require("../models/bookingModel");
 async function handleAddRoom(req, res){
     try{
@@ -29,8 +28,6 @@ async function handleAddRoom(req, res){
 
         const socket = req.app.get("io");
         socket.emit("roomAdded", data);
-
-
     }
     catch(error){
         console.error("Error is: ",error);   

@@ -1,6 +1,5 @@
 const logedinUser = require("../utilities/logedinuser")
 const Booking = require("../models/bookingModel");
-const {User} = require("../models/userModel")
 const {Comment} = require("../models/commentModel");
 const { $_match } = require("@hapi/joi/lib/base");
 const {commentAuthSchema} = require("../utilities/validationSchema")

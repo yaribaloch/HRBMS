@@ -11,7 +11,6 @@ const getroomproperties = require("../utilities/getroomproperties")
 const makeATransaction = require("../utilities/makeATransaction")
 const {bookingAuthSchema} = require("../utilities/validationSchema");
 const handleCreateStripeSession = require("../utilities/handleCreateStripeSession")   
-const { strip } = require("@hapi/joi/lib/base");
 
 async function handleAddBooking(req, res) {
     try{
