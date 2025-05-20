@@ -5,7 +5,6 @@ const generateOTP = require("../utilities/generateOTP")
 const {signupAuthSchema, OTPSchema} = require("../utilities/validationSchema");
 const Joi = require("joi");
 async function handleUserSignup(req, res){
-
     try{
         const result =await signupAuthSchema.validateAsync(req.body);
         const userExisting = await User.findOne({userEmail: result.userEmail});
